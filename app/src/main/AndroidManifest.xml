@@ -24,13 +24,14 @@
         </activity>
         <activity
             android:name=".SettingsActivity"
-            android:theme="@style/SettingsTheme"
             android:label="@string/action_settings"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/SettingsTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.motiolabs.android.myfast.MainActivity" />
         </activity>
+        <activity android:name=".SplashActivity"></activity>
     </application>
 
 </manifest>
