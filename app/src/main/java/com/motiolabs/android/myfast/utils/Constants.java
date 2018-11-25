@@ -44,7 +44,7 @@ public class Constants {
     /**
      * API Key
      */
-    public static final String API_KEY = "test"; // Use your API Key when API rate limit exceeded
+    public static final String API_KEY = "fe58e3d8-6ccb-4e7e-8735-b61ad6c93725"; // Use your API Key when API rate limit exceeded
     /**
      * Default number to set the image on the top of the textView
      */

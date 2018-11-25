@@ -127,6 +127,8 @@ public class MainActivity extends AppCompatActivity
                 // Error making GET request!
                 Log.e(TAG, "Fetch profile Error   :" + liApiError.getLocalizedMessage());
                 Toast.makeText(MainActivity.this, "Failed to fetch basic profile data. Please try again.", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(i);
             }
         });
     }
