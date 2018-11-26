@@ -87,6 +87,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private TextView txtSignUp;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +124,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         getPackageHash();
         cancelAPIRequest();
+
+        //pindah ke signUp
+        txtSignUp = findViewById(R.id.TvDaftar);
+        txtSignUp.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+            }
+        });
     }
 
     //untuk ambil HASH

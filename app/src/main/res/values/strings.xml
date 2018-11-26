@@ -147,4 +147,8 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."</string>
 
+
+    <!-- Label related to register -->
+    <string name="signup">Sign up</string>
+
 </resources>

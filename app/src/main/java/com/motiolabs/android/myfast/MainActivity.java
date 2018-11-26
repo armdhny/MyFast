@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+
         // Temukan tampilan pager yang akan memungkinkan kita menggeser antar fragmen
         viewPager = findViewById(R.id.viewpager);
 
