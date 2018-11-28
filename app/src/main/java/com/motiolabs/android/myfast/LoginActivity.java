@@ -34,9 +34,14 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.linkedin.platform.APIHelper;
 import com.linkedin.platform.DeepLinkHelper;
 import com.linkedin.platform.LISessionManager;
@@ -87,52 +92,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private TextView txtSignUp;
+    protected FirebaseAuth auth;
+    private Button mEmailSignInButton;
+    private TextView mEmailRegisterButton;
+    private ProgressBar progressBar;
 
+    // Build the list of member permissions our LinkedIn session requires
+    private static Scope buildScope() {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
-        // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        populateAutoComplete();
-
-        mPasswordView = findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        Button mEmailSignInButton = findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
-
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
-
-        getPackageHash();
-        cancelAPIRequest();
-
-        //pindah ke signUp
-        txtSignUp = findViewById(R.id.TvDaftar);
-        txtSignUp.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
-            }
-        });
+        //Check Scopes in Application Settings before passing here else you won't able to read that data
+        return Scope.build(Scope.R_BASICPROFILE, Scope.R_EMAILADDRESS);
     }
 
     //untuk ambil HASH
@@ -156,11 +125,104 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     }
 
-    // Build the list of member permissions our LinkedIn session requires
-    private static Scope buildScope() {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
 
-        //Check Scopes in Application Settings before passing here else you won't able to read that data
-        return Scope.build(Scope.R_BASICPROFILE, Scope.R_EMAILADDRESS, Scope.W_SHARE);
+        //Firebase Auth
+        auth = FirebaseAuth.getInstance();
+
+//        if (auth.getCurrentUser() != null) {
+//            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//            finish();
+//        }
+
+        // Set up the login form.
+        mEmailView = findViewById(R.id.email);
+        mPasswordView = findViewById(R.id.password);
+        mEmailSignInButton = findViewById(R.id.email_sign_in_button);
+        mEmailRegisterButton = findViewById(R.id.TvDaftar);
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
+        progressBar = findViewById(R.id.progressBar);
+
+        populateAutoComplete();
+
+        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == EditorInfo.IME_ACTION_DONE || id == EditorInfo.IME_NULL) {
+                    attemptLogin();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                attemptLogin();
+            }
+        });
+
+        mEmailRegisterButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+            }
+        });
+
+        //getPackageHash();
+        //cancelAPIRequest();
+
+        //Get Firebase auth instance
+        auth = FirebaseAuth.getInstance();
+
+//        mEmailSignInButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String email = mEmailView.getText().toString();
+//                final String password = mPasswordView.getText().toString();
+//
+//                if (TextUtils.isEmpty(email)) {
+//                    Toast.makeText(getApplicationContext(), "Enter email address!", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                if (TextUtils.isEmpty(password)) {
+//                    Toast.makeText(getApplicationContext(), "Enter password!", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                progressBar.setVisibility(View.VISIBLE);
+//
+//                //authenticate user
+//                auth.signInWithEmailAndPassword(email, password)
+//                        .addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<AuthResult> task) {
+//                                // If sign in fails, display a message to the user. If sign in succeeds
+//                                // the auth state listener will be notified and logic to handle the
+//                                // signed in user can be handled in the listener.
+//                                progressBar.setVisibility(View.GONE);
+//                                if (!task.isSuccessful()) {
+//                                    // there was an error
+//                                    if (password.length() < 6) {
+//                                        mPasswordView.setError(getString(R.string.minimum_password));
+//                                    } else {
+//                                        Toast.makeText(LoginActivity.this, getString(R.string.auth_failed), Toast.LENGTH_LONG).show();
+//                                    }
+//                                } else {
+//                                    Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
+//                                    startActivity(intent);
+//                                    finish();
+//                                }
+//                            }
+//                        });
+//            }
+//        });
     }
 
     //onClick login menggunakan LINKEDIN
@@ -181,7 +243,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                             Toast.makeText(LoginActivity.this, "Successfully authenticated with LinkedIn.", Toast.LENGTH_SHORT).show();
                             Intent i = new Intent (LoginActivity.this , MainActivity.class);
                             startActivity(i);
-                    }
+                        }
 
                         @Override
                         public void onAuthError(LIAuthError error) {
@@ -200,8 +262,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
 
     }
-
-
 
 
     @Override
@@ -284,7 +344,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailView.setError(null);
         mPasswordView.setError(null);
 
-        // Store values at the time of the login attempt.
+        // Store values at
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
@@ -480,4 +540,3 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
     }
 }
-

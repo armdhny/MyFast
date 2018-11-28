@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 27
@@ -44,4 +45,6 @@ dependencies {
 
     //picasso for loading image url into image view
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.google.firebase:firebase-core:16.0.5'
+    implementation 'com.google.firebase:firebase-auth:16.0.5'
 }

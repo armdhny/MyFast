@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1004385307434",
+    "firebase_url": "https://myfast-63f34.firebaseio.com",
+    "project_id": "myfast-63f34",
+    "storage_bucket": "myfast-63f34.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1004385307434:android:94936e42f5f22921",
+        "android_client_info": {
+          "package_name": "com.motiolabs.android.myfast"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1004385307434-n1shiu2bcc34ufpn6q0j848n2gso41u8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.motiolabs.android.myfast",
+            "certificate_hash": "a93984689b39ba3e5e7b96183d3a356b7286daf6"
+          }
+        },
+        {
+          "client_id": "1004385307434-vmovjrpmpjkho9hha9nv60q4am3102nj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCm1jv2DtczOMDWs52vNFHo8VV_4QkmpW4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1004385307434-vmovjrpmpjkho9hha9nv60q4am3102nj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -150,5 +150,7 @@
 
     <!-- Label related to register -->
     <string name="signup">Sign up</string>
+    <string name="minimum_password">password kurang dari 6 karakter</string>
+    <string name="auth_failed">Login Gagal</string>
 
 </resources>
