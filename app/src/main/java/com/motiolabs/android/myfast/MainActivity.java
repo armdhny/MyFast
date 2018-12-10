@@ -23,6 +23,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
 import com.linkedin.platform.APIHelper;
 import com.linkedin.platform.LISessionManager;
 import com.linkedin.platform.errors.LIApiError;
@@ -50,10 +53,18 @@ public class MainActivity extends AppCompatActivity
     //LINK : https://developer.linkedin.com/docs/fields/basic-profile
     private static final String host = "api.linkedin.com";
     private static final String url = "https://api.linkedin.com/v1/people/~:(id,first-name,last-name,headline," +
-            "public-profile-url,picture-url,email-address,picture-urls::(original))";
+            "public-profile-url,picture-url,email-address,picture-urls::(original),location,summary,positions)";
+//    private static final String url2 = "https://api.linkedin.com/v2/skills/~:(id,skill:(name))";
 
 
     private ViewPager viewPager;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference myRef = database.getReference("id");
+
+    private DatabaseReference mDatabase;
+// ...
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +113,7 @@ public class MainActivity extends AppCompatActivity
 
 
         fetchBasicProfileData();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     public void fetchBasicProfileData() {
@@ -132,25 +144,54 @@ public class MainActivity extends AppCompatActivity
                 startActivity(i);
             }
         });
+        //Dibawah ini request untuk skill
+//        apiHelper.getRequest(MainActivity.this, url2, new ApiListener() {
+//            @Override
+//            public void onApiSuccess(ApiResponse apiResponse) {
+//                Log.d(TAG, "API Skillz : " + apiResponse.getResponseDataAsString() + "\n" + apiResponse.getResponseDataAsJson().toString());
+//            }
+//
+//            @Override
+//            public void onApiError(LIApiError LIApiError) {
+//
+//            }
+//        });
     }
 
     @SuppressLint("SetTextI18n")
     public void updateUI(JSONObject response) {
         try {
 
-                //menampilkan nama depan dan nama belakang mengubahnya ke STRING
-                nama.setText(response.get("firstName").toString()+ " " + response.get("lastName").toString());
+            Gson gson = new Gson();
+            //myRef.setValue(response.get("id").toString());
 
+            //menampilkan nama depan dan nama belakang mengubahnya ke STRING
+            nama.setText(response.get("firstName").toString() + " " + response.get("lastName").toString());
             //menampilkan headline pada linkedin
             // mengubahnya ke STRING
-                headline.setText(response.get("headline").toString());
-
-                email.setText(response.getString("emailAddress"));
-
-                // menangkap gambar yang ada di profile linkedin dan menampilkan nya
+            headline.setText(response.get("headline").toString());
+            //Menampilkan email
+            email.setText(response.getString("emailAddress"));
+            // menangkap gambar yang ada di profile linkedin dan menampilkan nya
             // menggunakan picasso
-                Picasso.with(this).load(response.getString("pictureUrl"))
-                                .into(userImageView);
+            Picasso.with(this).load(response.getString("pictureUrl")).into(userImageView);
+
+
+            //set value in firebase
+            //Nama
+            mDatabase.child("id" + response.get("id").toString()).child("Nama").setValue(response.get("firstName").toString() + " " + response.get("lastName").toString());
+            //Headline
+            mDatabase.child("id" + response.get("id").toString()).child("Headline").setValue(response.get("headline").toString());
+            //Email
+            mDatabase.child("id" + response.get("id").toString()).child("Email").setValue(response.getString("emailAddress"));
+            //Bio
+            mDatabase.child("id" + response.get("id").toString()).child("Bio").setValue(response.get("summary").toString());
+            //Loc
+            mDatabase.child("id" + response.get("id").toString()).child("Lokasi").setValue(response.getJSONObject("location").get("name").toString());
+            //Position
+            //mDatabase.child("id" + response.get("id").toString()).child("Posisi").setValue(response.getJSONObject("positions").getJSONObject("values").getJSONArray("title").toString() + " at " + response.getJSONObject("company").getJSONArray("name").toString());
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
